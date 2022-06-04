@@ -1,4 +1,4 @@
-## gen-coro-postgres.py - transmit notes from text file into bd PostgreSQL
+## gen-coro-postgres.py - передача данных из текстового файла в БД PostgreSQL с использованием генератора и сопрограммы
 
 ---
 
