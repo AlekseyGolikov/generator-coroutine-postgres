@@ -12,18 +12,18 @@ def reader():
                 id, title, price = s.split()
                 yield id, title, price
 
-# class wrapper:
-#     def __init__(self, coroutine):
-#         self.coro = coroutine()
-#     def __enter__(self):
-#         self.coro.__next__()
-#         return self.coro
-#     def __exit__(self, type, value, traceback):
-#         self.coro.close()
-#         if value is None: return True
-#         else: return False
-#     def send(self, *args):
-#         return self.coro.send(*args)
+class wrapper:
+    def __init__(self, coroutine):
+        self.coro = coroutine()
+    def __enter__(self):
+        self.coro.__next__()
+        return self.coro
+    def __exit__(self, type, value, traceback):
+        self.coro.close()
+        if value is None: return True
+        else: return False
+    def send(self, *args):
+        return self.coro.send(*args)
 
 def writer():
     try:
@@ -50,14 +50,13 @@ if __name__ == "__main__":
 
     try:
         gen = reader()
-        c = writer()
-        c.__next__()
+        # c = writer()
+        # c.__next__()
         while True:
             item = gen.__next__()
-            # with wrapper(writer) as coro:
-            #     coro.send(item)
-            # id, title, price = int(item[0]), item[1], float(item[2])
-            c.send(item)
+            with wrapper(writer) as coro:
+                coro.send(item)
+            # c.send(item)
             sleep(1)
     except Exception:
         pass
